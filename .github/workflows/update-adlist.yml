@@ -2,30 +2,28 @@ name: Update MikroTik CZ-SK Adlist
 
 on:
   schedule:
-    - cron: '0 3 * * *' # Spustí sa každú noc o 03:00 UTC
-  workflow_dispatch: # Umožní spustiť aktualizáciu aj manuálne stlačením tlačidla
+    - cron: '0 3 * * *' # Každú noc o 03:00 UTC
+  workflow_dispatch: # Možnosť spustiť manuálne
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Dôležité: povolenie na zápis vyčisteného zoznamu späť do repozitára
+      contents: write # Povolenie na zápis do repozitára
 
     steps:
     - name: Checkout repozitára
       uses: actions/checkout@v4
 
-    - name: Nastavenie Pythonu
-      uses: actions/setup-python@v5
-      with:
-        python-python-version: '3.x'
-
     - name: Spustenie konverzného skriptu
-      run: python convert.py
+      run: python3 convert.py
 
     - name: Uloženie a push zmien
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Explicitné odovzdanie tokenu pre git push
       run: |
         git config --local user.email "github-actions[bot]@://github.com"
         git config --local user.name "github-actions[bot]"
         git add cz-sk-adlist.txt
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Automatická aktualizácia adlistu" && git push)
+        # Ak nie sú žiadne zmeny, skript neskončí chybou (exit 0)
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Automatická aktualizácia adlistu" && git push "https://x-access-token:${GITHUB_TOKEN}@://github.com{{ github.repository }}.git" HEAD:main)
