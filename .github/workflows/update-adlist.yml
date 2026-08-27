@@ -9,19 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Dôležité: povolenie na zápis vyčisteného zoznamu späť do repozitára
+      contents: write # Povolenie na zápis vyčisteného zoznamu späť do repozitára
 
     steps:
     - name: Checkout repozitára
       uses: actions/checkout@v4
 
-    - name: Nastavenie Pythonu
-      uses: actions/setup-python@v5
-      with:
-        python-python-version: '3.x'
-
+    # Použijeme priamo systémový Python v Ubuntu, aby sme predišli chybám s Node depStandardizáciou
     - name: Spustenie konverzného skriptu
-      run: python convert.py
+      run: python3 convert.py
 
     - name: Uloženie a push zmien
       run: |
