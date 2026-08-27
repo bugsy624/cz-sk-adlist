@@ -5,7 +5,7 @@ EASYLIST_URL = "https://githubusercontent.com"
 OUTPUT_FILE = "cz-sk-adlist.txt"
 
 def main():
-    print(f"Sťahujem EasyList z: {EASYLIST_URL}")
+    print(f"Sťahujem EasyList z: {https://raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt}")
     try:
         req = urllib.request.Request(EASYLIST_URL, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req) as response:
