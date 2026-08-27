@@ -35,7 +35,7 @@ def main():
     # Zápis vyčistených domén do súboru
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         for domain in sorted(domains):
-            f.write(f"{domain}\n")
+            f.write(f"0.0.0.0 {domain}\n")
 
     print(f"Hotovo. Úspešne uložených {len(domains)} domén.")
 
