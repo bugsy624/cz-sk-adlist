@@ -1,11 +1,13 @@
 import re
 import urllib.request
 
-EASYLIST_URL = "https://githubusercontent.com"
+# Nastavenie správnej URL adresy pre zdroj
+EASYLIST_URL = "https://raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt"
 OUTPUT_FILE = "cz-sk-adlist.txt"
 
 def main():
-    print(f"Sťahujem EasyList z: {https://raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt}")
+    # Opravený print príkaz (premenná EASYLIST_URL je správne dosadená do reťazca)
+    print(f"Sťahujem EasyList z: {EASYLIST_URL}")
     try:
         req = urllib.request.Request(EASYLIST_URL, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req) as response:
@@ -15,6 +17,7 @@ def main():
         return
 
     domains = set()
+    # Regulárny výraz, ktorý hľadá zápis ||domena.sk^
     pattern = re.compile(r"^\|\|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\^")
 
     for line in content.splitlines():
@@ -25,14 +28,16 @@ def main():
         match = pattern.match(line)
         if match:
             domain = match.group(1).lower()
+            # Vyradenie IP adries z adlistu
             if not re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", domain):
                 domains.add(domain)
 
+    # Zápis vyčistených domén do súboru
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         for domain in sorted(domains):
             f.write(f"{domain}\n")
 
-    print(f"Hotovo. Uložených {len(domains)} domén.")
+    print(f"Hotovo. Úspešne uložených {len(domains)} domén.")
 
 if __name__ == "__main__":
     main()
