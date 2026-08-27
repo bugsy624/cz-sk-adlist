@@ -19,11 +19,9 @@ jobs:
       run: python3 convert.py
 
     - name: Uloženie a push zmien
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add cz-sk-adlist.txt
-        # Opravený zápis URL adresy pomocou systémovej premennej $GITHUB_REPOSITORY
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Automatická aktualizácia adlistu" && git push "https://x-access-token:${GITHUB_TOKEN}@://github.com{GITHUB_REPOSITORY}.git" HEAD:main)
+        # Ak nie sú zmeny, skript neskončí chybou. Ak sú, urobí sa čistý push do vetvy main.
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Automatická aktualizácia adlistu" && git push origin HEAD:main)
