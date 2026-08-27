@@ -3,19 +3,18 @@ name: Update MikroTik CZ-SK Adlist
 on:
   schedule:
     - cron: '0 3 * * *' # Spustí sa každú noc o 03:00 UTC
-  workflow_dispatch: # Umožní spustiť aktualizáciu aj manuálne stlačením tlačidla
+  workflow_dispatch: # Umožní spustiť aktualizáciu manuálne tlačidlom
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Povolenie na zápis vyčisteného zoznamu späť do repozitára
+      contents: write
 
     steps:
     - name: Checkout repozitára
       uses: actions/checkout@v4
 
-    # Použijeme priamo systémový Python v Ubuntu, aby sme predišli chybám s Node depStandardizáciou
     - name: Spustenie konverzného skriptu
       run: python3 convert.py
 
